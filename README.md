@@ -34,6 +34,6 @@ Then, from the `VIS_assignment1` directory, run:
 ```
 python src/image_search_hist.py --image_index {INDEX}
 ```
-`{INDEX}` represents an user-defined argument. Here, you can write any number from 0–1359 and it will index your target image.
+`{INDEX}` represents a user-defined argument. Here, you can write any number from 0–1359 and it will index your target image.
 
 ## 5. Discussion of results
