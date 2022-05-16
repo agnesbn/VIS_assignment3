@@ -26,7 +26,7 @@ Your ```.py``` script should minimally do the following:
 Before running the script, run the following in the Terminal:
 ```
 pip install --upgrade pip
-pip install opencv-python
+pip install opencv-python scikit-learn tensorflow tensorboard tensorflow-hub pydot scikeras[tensorflow-cpu]
 sudo apt-get update
 sudo apt-get -y install graphviz
 ```
