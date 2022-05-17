@@ -1,11 +1,13 @@
 """
 Feature extraction with the CIFAR10 dataset
 """
-# Import the necessary packages
+""" Import the relevant packages """
  # system
 import os
  # tf tools
 import tensorflow as tf
+ # argument parser
+import argparse
  # image processsing
 from tensorflow.keras.preprocessing.image import (load_img, img_to_array, ImageDataGenerator)
  # VGG16 model
@@ -17,7 +19,6 @@ from tensorflow.keras.layers import (Flatten, Dense, Dropout, BatchNormalization
  # generic model object
 from tensorflow.keras.models import Model
  # optimizers
-from tensorflow.keras.optimizers.schedules import ExponentialDecay
 from tensorflow.keras.optimizers import SGD
  # scikit-learn
 from sklearn.preprocessing import LabelBinarizer
@@ -27,11 +28,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 """ Basic functions """
-# Function for saving loss and accuracy after every epoch
-def save_history(H, epochs):
+# Function to save history
+def save_history(H, epochs, plot_name):
+    outpath = os.path.join("out", f"{plot_name}.png")
     plt.style.use("seaborn-colorblind")
-
+    
     plt.figure(figsize=(12,6))
+    plt.suptitle(f"History for CIFAR_10 trained on VGG16", fontsize=16)
     plt.subplot(1,2,1)
     plt.plot(np.arange(0, epochs), H.history["loss"], label="train_loss")
     plt.plot(np.arange(0, epochs), H.history["val_loss"], label="val_loss", linestyle=":")
@@ -40,7 +43,7 @@ def save_history(H, epochs):
     plt.ylabel("Loss")
     plt.tight_layout()
     plt.legend()
-
+    
     plt.subplot(1,2,2)
     plt.plot(np.arange(0, epochs), H.history["accuracy"], label="train_acc")
     plt.plot(np.arange(0, epochs), H.history["val_accuracy"], label="val_acc", linestyle=":")
@@ -49,21 +52,63 @@ def save_history(H, epochs):
     plt.ylabel("Accuracy")
     plt.tight_layout()
     plt.legend()
-    plt.savefig(os.path.join("out", "history.png"))
+    plt.savefig(os.path.join(outpath))
 
 # Function for saving classification report
-def report_to_txt(report):
-    outpath = os.path.join("out", "classification_report.txt")
+def report_to_txt(report, report_name, epochs, learning_rate, batch_size):
+    outpath = os.path.join("out", f"{report_name}.txt")
     with open(outpath,"w") as file:
+        file.write(f"Classification report\nData: CIFAR_10\nModel: VGG16\nEpochs: {epochs}\nLearning rate:{learning_rate}\nBatch size: {batch_size}\n")
         file.write(str(report))    
 
+# Min-max normalisation function
+def minmax(data):
+    X_norm = (data-data.min())/(data.max()-data.min())
+    return X_norm         
+        
+# Argument parser
+def parse_args():
+    ap = argparse.ArgumentParser()
+    # learning rate argument
+    ap.add_argument("-l", 
+                    "--learning_rate",
+                    type=float,
+                    default=0.001,
+                    help="The learning rate for the stochastic gradient descent (default=0.01)")
+    # batch size argument
+    ap.add_argument("-b",
+                    "--batch_size",
+                    type=int,
+                    default=128,
+                    help="The size of the batches that the model goes through the data in (default=128)")
+    # number of epochs to train the model in
+    ap.add_argument("-e",
+                    "--epochs",
+                    type=int,
+                    default=10,
+                    help = "The number of epochs to train your model in (default=10)")
+    # report name argument
+    ap.add_argument("-r",
+                    "--report_name",
+                    type=str,
+                    default="classification_report",
+                    help="The name of the classification report")
+    # plot name argument
+    ap.add_argument("-p",
+                    "--plot_name",
+                    type=str,
+                    default="history_plot",
+                    help="The name of the plot of loss and accuracy")
+    args = vars(ap.parse_args())
+    return args 
+
 """ Feature extraction with VGG16 """        
-def train_model():
+def train_model(learning_rate, batch_size, epochs, report_name, plot_name):
     # import cifar10 dataset
     (X_train, y_train), (X_test, y_test) = cifar10.load_data()
     # simple normalisation
-    X_train_scaled = X_train/255
-    X_test_scaled = X_test/255
+    X_train_scaled = minmax(X_train)
+    X_test_scaled = minmax(X_test)
     # import labels
     labels = ["airplane",
               "automobile",
@@ -82,9 +127,10 @@ def train_model():
     # clear the layers kept in memory (in case the code is run repeatedly)
     tf.keras.backend.clear_session()
     # load VGG16 without classifier layer
+    input_shape = (X_train.shape[1], X_train.shape[2], X_train.shape[3])
     model = VGG16(include_top = False,
               pooling = "avg",
-              input_shape = (32,32,3))
+              input_shape = input_shape)
     # disable training convolutional layers
     for layer in model.layers:
         layer.trainable = False
@@ -94,13 +140,8 @@ def train_model():
     output = Dense(10, activation = "softmax")(class1)
     # define new model
     model = Model(inputs=model.inputs, outputs=output)
-    # compile the model
-    lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
-        initial_learning_rate = 0.01,
-        decay_steps = 10000,
-        decay_rate = 0.9)
     # define gradient descent
-    sgd = SGD(learning_rate=lr_schedule)
+    sgd = SGD(learning_rate=learning_rate)
     # compile model
     model.compile(optimizer=sgd,
                   loss="categorical_crossentropy",
@@ -108,21 +149,30 @@ def train_model():
     # train the model
     H = model.fit(X_train, y_train,
                   validation_data = (X_test, y_test),
-                  batch_size = 128,
-                  epochs = 10,
+                  batch_size = batch_size,
+                  epochs = epochs,
                   verbose = 1)
     # save history
-    save_history(H, 10)
+    save_history(H, epochs, plot_name)
     # create and save classification report
     predictions = model.predict(X_test, batch_size=128)
     report = classification_report(y_test.argmax(axis=1),
                                    predictions.argmax(axis=1),
                                    target_names = labels)
-    report_to_txt(report)
+    report_to_txt(report, report_name, epochs, learning_rate, batch_size)
 
 def main():
-    train_model()
-   
-    
+    # parse arguments
+    args = parse_args()
+    # get arguments
+    learning_rate = args["learning_rate"]
+    batch_size = args["batch_size"]
+    epochs = args["epochs"]
+    report_name = args["report_name"]
+    plot_name = args["plot_name"]
+    # train model, save plot and classification report
+    train_model(learning_rate, batch_size, epochs, report_name, plot_name)
+
+
 if __name__=="__main__":
     main()
