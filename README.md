@@ -6,8 +6,7 @@ The portfolio for __Visual Analytics S22__ consists of 4 projects (3 class assig
 The initial assignment was made partly in collaboration with others from the course, but the final code is my own.
 
 ## 2. Assignment description
-When we were first assigned the assignment, the assignment description was as follows:
-
+### Main task
 In this assignment, you are still going to work with the CIFAR10 dataset. However, this time, you are going to make build a classifier using transfer learning with a pretrained CNN like VGG16 for feature extraction. 
 
 Your ```.py``` script should minimally do the following:
@@ -17,6 +16,11 @@ Your ```.py``` script should minimally do the following:
 - Train a classifier 
 - Save plots of the loss and accuracy 
 - Save the classification report
+
+### Bonus tasks
+- Use ```argparse()``` to allow users to define specific hyperparameters in the script.
+  - This might include e.g. learning rate, batch size, etc
+- The user should be able to define the names of the output plot and output classification report from the command line
 
 ## 3. Methods
 
