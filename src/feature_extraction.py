@@ -58,7 +58,7 @@ def save_history(H, epochs, plot_name):
 def report_to_txt(report, report_name, epochs, learning_rate, batch_size):
     outpath = os.path.join("out", f"{report_name}.txt")
     with open(outpath,"w") as file:
-        file.write(f"Classification report\nData: CIFAR_10\nModel: VGG16\nEpochs: {epochs}\nLearning rate:{learning_rate}\nBatch size: {batch_size}\n")
+        file.write(f"Classification report\nData: CIFAR_10\nModel: VGG16\nEpochs: {epochs}\nLearning rate: {learning_rate}\nBatch size: {batch_size}\n")
         file.write(str(report))    
 
 # Min-max normalisation function
