@@ -36,8 +36,8 @@ def save_history(H, epochs, plot_name):
     plt.figure(figsize=(12,6))
     plt.suptitle(f"History for CIFAR_10 trained on VGG16", fontsize=16)
     plt.subplot(1,2,1)
-    plt.plot(np.arange(0, epochs), H.history["loss"], label="train_loss")
-    plt.plot(np.arange(0, epochs), H.history["val_loss"], label="val_loss", linestyle=":")
+    plt.plot(np.arange(0, epochs), H.history["loss"], label="Train")
+    plt.plot(np.arange(0, epochs), H.history["val_loss"], label="Validation", linestyle=":")
     plt.title("Loss curve")
     plt.xlabel("Epoch")
     plt.ylabel("Loss")
@@ -45,8 +45,8 @@ def save_history(H, epochs, plot_name):
     plt.legend()
     
     plt.subplot(1,2,2)
-    plt.plot(np.arange(0, epochs), H.history["accuracy"], label="train_acc")
-    plt.plot(np.arange(0, epochs), H.history["val_accuracy"], label="val_acc", linestyle=":")
+    plt.plot(np.arange(0, epochs), H.history["accuracy"], label="Train")
+    plt.plot(np.arange(0, epochs), H.history["val_accuracy"], label="Validation", linestyle=":")
     plt.title("Accuracy curve")
     plt.xlabel("Epoch")
     plt.ylabel("Accuracy")
@@ -85,8 +85,8 @@ def parse_args():
     ap.add_argument("-e",
                     "--epochs",
                     type=int,
-                    default=10,
-                    help = "The number of epochs to train your model in (default=10)")
+                    default=20,
+                    help = "The number of epochs to train your model in (default=20)")
     # report name argument
     ap.add_argument("-r",
                     "--report_name",
@@ -160,6 +160,7 @@ def train_model(learning_rate, batch_size, epochs, report_name, plot_name):
                                    predictions.argmax(axis=1),
                                    target_names = labels)
     report_to_txt(report, report_name, epochs, learning_rate, batch_size)
+    return print(report)
 
 def main():
     # parse arguments
