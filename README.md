@@ -41,7 +41,7 @@ Make sure your current directory is the `VIS_assignment3` folder. Then run:
 ```
 python src/feature_extraction.py (--learning_rate <LEARNING RATE> --batch_size <BATCH SIZE> --epochs <EPOCHS> --report_name <REPORT NAME> --plot_name <PLOT NAME>)
 ```
-Input:
+__Input:__
 
 - `<LEARNING RATE>` represents the learning rate for the stochastic gradient descent. The default value is `0.001`.
 - `<BATCH SIZE>` represents the batch_size by with the model goes through the data. The default valies is `128`.
