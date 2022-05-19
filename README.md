@@ -37,7 +37,7 @@ sudo apt-get -y install graphviz
 ```
 
 ### Run the script
-Make sure your current directory is the VIS_assignment3 folder. Then run:
+Make sure your current directory is the `VIS_assignment3` folder. Then run:
 ```
 python src/feature_extraction.py (--learning_rate <LEARNING RATE> --batch_size <BATCH SIZE> --epochs <EPOCHS> --report_name <REPORT NAME> --plot_name <PLOT NAME>)
 ```
