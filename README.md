@@ -1,10 +1,8 @@
 # Assignment 3 – Transfer learning + CNN classification
 The portfolio for __Visual Analytics S22__ consists of 4 projects (3 class assignments and 1 self-assigned project). This is the __third assignment__ in the portfolio.
 
-**Github repository**: https://github.com/agnesbn/VIS_assignment3.
-
 ## 1. Contribution
-The initial assignment was made partly in collaboration with others from the course, but the final code is my own.
+I wrote this code independently
 
 ## 2. Assignment description
 ### Main task
