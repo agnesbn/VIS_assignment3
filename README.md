@@ -41,11 +41,13 @@ Make sure your current directory is the `VIS_assignment3` folder. Then run:
 ```
 python src/feature_extraction.py (--learning_rate <LEARNING RATE> --batch_size <BATCH SIZE> --epochs <EPOCHS> --report_name <REPORT NAME> --plot_name <PLOT NAME>)
 ```
-* `<LEARNING RATE>` represents the learning rate for the stochastic gradient descent. The default value is `0.001`.
-* `<BATCH SIZE>` represents the batch_size by with the model goes through the data. The default valies is `128`.
-* `<EPOCHS>` represents the number of epochs that the model trains in. The default value is `20`.
-* `<REPORT NAME>` represents the name that the classification report is saved under (it will always be saved as a TXT). The default value is `classification_report`.
-* `<PLOT NAME>` represents the name that the history plot is saved under (it will always be saved as a PNG). The default value is `history_plot`.
+Input:
+
+- `<LEARNING RATE>` represents the learning rate for the stochastic gradient descent. The default value is `0.001`.
+- `<BATCH SIZE>` represents the batch_size by with the model goes through the data. The default valies is `128`.
+- `<EPOCHS>` represents the number of epochs that the model trains in. The default value is `20`.
+- `<REPORT NAME>` represents the name that the classification report is saved under (it will always be saved as a TXT). The default value is `classification_report`.
+- `<PLOT NAME>` represents the name that the history plot is saved under (it will always be saved as a PNG). The default value is `history_plot`.
 
 
 The results are saved in the [`out`](https://github.com/agnesbn/VIS_assignment3/tree/main/out) folder.
